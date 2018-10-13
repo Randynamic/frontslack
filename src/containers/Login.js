@@ -9,20 +9,33 @@ class Login extends Component {
   };
 
   shouldComponentUpdate() {
-    // if (!AuthService.isAuthenticated()) {
-    //   window.location.href =
-    //     "https://slack.com/oauth/authorize?client_id=265156972019.453766114196&scope=identity.basic";
-    //   return false;
-    // }
+    if (AuthService.redirectToAppLogin) {
+      window.location.href =
+        "https://slack.com/oauth/authorize?client_id=265156972019.453766114196&scope=identity.basic";
+      return false;
+    }
     return true;
   }
 
   login = () => {
-    AuthService.authenticate(() => {
-      this.setState(() => ({
-        redirectToReferrer: true
-      }));
-    });
+    AuthService.authenticate()
+      .then(response => {
+        console.log("got user session", response);
+        this.setState(() => ({
+          redirectToReferrer: true
+        }));
+      })
+      .catch(error => {
+        switch (error.type) {
+          case "no_auth_code":
+            this.setState(() => ({
+              redirectToReferrer: false
+            }));
+            break;
+          default:
+            break;
+        }
+      });
   };
 
   render() {

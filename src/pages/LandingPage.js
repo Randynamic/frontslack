@@ -1,13 +1,13 @@
 import React from "react";
 
-const LandingPage = () => {
-  return (
-    <React.Fragment>
-      <div>
-        <div>Landing Page</div>
-      </div>
-    </React.Fragment>
-  );
-};
+import { Headers } from "../components/Headers/Headers";
+import { IntroText } from "../components/Blocks/IntroText";
+import { Footer } from "../components/Blocks/Footer";
 
-export default LandingPage;
+export const LandingPage = props => (
+  <div>
+    <Headers />
+    <IntroText>{props.children}</IntroText>
+    <Footer />
+  </div>
+);

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../styles/components/App.scss";
 import Avatar from "../containers/Avatar/Avatar";
-import UserData from "../services/UserData";
+import UserData from "../../services/UserData";
 import qs from "query-string";
 
 class App extends Component {
