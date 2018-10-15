@@ -1,22 +1,19 @@
 import React from "react";
 import "../styles/containers/App.scss";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-
-import Layout from "../components/UI/Layout";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import MainPage from "../pages/MainPage";
-
-import { getToken, AuthFailed } from "./____/Auth";
-
+import { DefaultLayout, AuthLayout } from "../components/UI/Layouts";
+import { PrivateRoute } from "../hoc/PrivateRoute";
 import { connect } from "react-redux";
 
 const App = props => {
   return (
     <Router>
-      <React.Fragment>
-        <Route path="/" component={Layout} />
-        <Route path="/auth/getToken" component={getToken} />
-        <Route path="/auth/failed" component={AuthFailed} />
-      </React.Fragment>
+      <Switch>
+        <Route path="/" exact component={DefaultLayout} />
+        <Route path="/auth" component={AuthLayout} />
+        <PrivateRoute path="/main" component={MainPage} />
+      </Switch>
     </Router>
   );
 };

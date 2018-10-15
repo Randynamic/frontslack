@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 
-import AuthService from "../hoc/AuthService";
+import AuthService from "../../hoc/AuthService";
 
 class Login extends Component {
   state = {

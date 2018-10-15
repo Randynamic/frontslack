@@ -7,7 +7,7 @@ import { Footer } from "../components/Blocks/Footer";
 export const LandingPage = props => (
   <div>
     <Headers />
-    <IntroText>{props.children}</IntroText>
+    <IntroText />
     <Footer />
   </div>
 );
