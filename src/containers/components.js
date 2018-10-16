@@ -20,7 +20,7 @@ export const Transition = props => {
 };
 
 export const FlashMessage = props => {
-  const messagesList = props.flashMessages.flashMessages.map(message => (
+  const messagesList = props.flash.messages.map(message => (
     <div key={message.id}>
       <div className={"FlashMessage--" + message.type}>
         {message.id} - {message.type}: > {message.message}

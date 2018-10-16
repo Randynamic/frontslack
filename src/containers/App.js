@@ -16,6 +16,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <div id="app">
         <FlashMessage {...this.props} />
@@ -27,10 +28,7 @@ class App extends Component {
           isAuthenticated={this.props.isAuthenticated}
           current={this.props.location.pathname}
         />
-        <Content
-          id="content"
-          hasError={this.props.flashMessages.flashMessages.length > 0}
-        >
+        <Content id="content" hasError={this.props.flash.messages.length > 0}>
           <Routes />
         </Content>
       </div>
@@ -41,7 +39,7 @@ class App extends Component {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   transitions: state.transitions,
-  flashMessages: state.flashMessages
+  flash: state.flash
 });
 
 const mapDispatchToProps = dispatch =>

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "react-router";
 
-import { newError, newWarning, clearMessages } from "../../store/flashMessages";
+import { newError, newWarning, clearMessages } from "../../store/flash";
 
 import Page from "../../components/page";
 

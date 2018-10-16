@@ -3,14 +3,14 @@ export const NEW_WARNING = "messages:warning/NEW";
 export const CLEAR_MESSAGES = "messages:all/CLEAR";
 
 const initialState = {
-  flashMessages: []
+  messages: []
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case NEW_ERROR:
     case NEW_WARNING:
-      return { ...state, flashMessages: [...state.flashMessages, action.data] };
+      return { ...state, messages: [...state.messages, action.data] };
     case CLEAR_MESSAGES:
       return initialState;
     default:
