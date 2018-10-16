@@ -1,21 +1,45 @@
-import React from "react";
-import "../styles/containers/App.scss";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import MainPage from "../pages/MainPage";
-import { DefaultLayout, AuthLayout } from "../components/UI/Layouts";
-import { PrivateRoute } from "../hoc/PrivateRoute";
+import React, { Component } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { withRouter } from "react-router";
 
-const App = props => {
-  return (
-    <Router>
-      <Switch>
-        <Route path="/" exact component={DefaultLayout} />
-        <Route path="/auth" component={AuthLayout} />
-        <PrivateRoute path="/main" component={MainPage} />
-      </Switch>
-    </Router>
-  );
-};
+import { establishCurrentUser } from "../store/auth";
 
-export default connect(state => state)(App);
+import { Header } from "./components";
+import Routes from "../routes";
+
+import "../styles/containers/App.scss";
+
+class App extends Component {
+  componentWillMount() {
+    this.props.establishCurrentUser();
+  }
+
+  render() {
+    return (
+      <div id="app">
+        <Header
+          isAuthenticated={this.props.isAuthenticated}
+          current={this.props.location.pathname}
+        />
+        <div id="content">
+          <Routes />
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ establishCurrentUser }, dispatch);
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)
+);
