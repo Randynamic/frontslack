@@ -3,16 +3,10 @@ import { withRouter } from "react-router";
 import Helmet from "react-helmet";
 import logo from "../../static/media/images/logo.svg";
 
-const SITE_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://cra-ssr.herokuapp.com";
+const SITE_URL = "http://localhost:3000";
 
-const FACEBOOK_APP_ID = "XXXXXXXXX";
-
-const defaultTitle = "My Website";
-const defaultDescription =
-  "This is a really awesome website where we can render on the server. Supa cool.";
+const defaultTitle = "Slack App";
+const defaultDescription = "SlackApp Desc";
 const defaultImage = `${SITE_URL}${logo}`;
 const defaultTwitter = "@io";
 const defaultSep = " | ";
@@ -57,8 +51,7 @@ class Page extends Component {
       { property: "og:url", content: SITE_URL + pathname },
       { property: "og:image", content: theImage },
       { property: "og:description", content: theDescription },
-      { property: "og:site_name", content: defaultTitle },
-      { property: "fb:app_id", content: FACEBOOK_APP_ID }
+      { property: "og:site_name", content: defaultTitle }
     ];
 
     if (noCrawl) {

@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 
 import { establishCurrentUser } from "../store/auth";
 
-import { Header } from "./components";
+import { Header, Transition, FlashMessage, Content } from "./components";
 import Routes from "../routes";
 
 import "../styles/containers/App.scss";
@@ -18,20 +18,30 @@ class App extends Component {
   render() {
     return (
       <div id="app">
+        <FlashMessage {...this.props} />
+        <Transition
+          {...this.props}
+          isLoading={this.props.transitions.isLoading || false}
+        />
         <Header
           isAuthenticated={this.props.isAuthenticated}
           current={this.props.location.pathname}
         />
-        <div id="content">
+        <Content
+          id="content"
+          hasError={this.props.flashMessages.flashMessages.length > 0}
+        >
           <Routes />
-        </div>
+        </Content>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  transitions: state.transitions,
+  flashMessages: state.flashMessages
 });
 
 const mapDispatchToProps = dispatch =>

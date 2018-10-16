@@ -24,7 +24,6 @@ class Profile extends Component {
 
   render() {
     const { name, id, image } = this.props.currentProfile;
-
     return (
       <Page
         id="profile"

@@ -3,6 +3,8 @@ import arvidsson from "../static/media/images/arvidsson.jpg";
 
 export const SET_CURRENT_PROFILE = "auth/SET_CURRENT_PROFILE";
 export const PENDING_CURRENT_PROFILE = "auth/PENDING_CURRENT_PROFILE";
+export const TRANSITION_PENDING = "trans/PENDING";
+export const TRANSITION_FINISHED = "trans/FINISHED";
 
 const initialState = {
   currentProfile: {}
@@ -15,12 +17,6 @@ export default (state = initialState, action) => {
         ...state,
         currentProfile: action.profile
       };
-
-    case PENDING_CURRENT_PROFILE:
-      return {
-        ...state,
-        isLoaded: action.isLoaded
-      };
     default:
       return state;
   }
@@ -29,8 +25,8 @@ export default (state = initialState, action) => {
 export const getCurrentProfile = id => dispatch =>
   new Promise(resolve => {
     dispatch({
-      type: PENDING_CURRENT_PROFILE,
-      isLoaded: false
+      type: TRANSITION_PENDING,
+      isLoading: true
     });
 
     setTimeout(() => {
@@ -49,14 +45,13 @@ export const getCurrentProfile = id => dispatch =>
           image: arvidsson
         };
       }
-
       dispatch({
         type: SET_CURRENT_PROFILE,
         profile
       });
       dispatch({
-        type: PENDING_CURRENT_PROFILE,
-        isLoaded: true
+        type: TRANSITION_FINISHED,
+        isLoading: false
       });
       resolve(profile);
     }, 3000);
