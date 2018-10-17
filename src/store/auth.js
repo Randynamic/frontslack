@@ -1,5 +1,7 @@
 import Cookies from "js-cookie";
 
+import { NEW_INFO } from "./flash";
+
 export const AUTHENTICATE = "auth/AUTHENTICATE";
 export const SET_CURRENT_USER = "auth/SET_CURRENT_USER";
 export const GET_NEW_CODE = "auth/GET_NEW_CODE";
@@ -91,6 +93,10 @@ export const logoutUser = () => dispatch => {
     type: AUTHENTICATE,
     isAuthenticated: false,
     currentUser: {}
+  });
+  dispatch({
+    type: NEW_INFO,
+    data: { id: 1, message: "Logout Successful", type: "info", autoHide: 5 }
   });
 };
 

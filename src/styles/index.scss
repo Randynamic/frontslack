@@ -9,3 +9,10 @@ body {
 code {
   font-family: source-code-pro, "Courier New", monospace;
 }
+
+#root {
+  height: 100vh;
+  > div {
+    height: 100vh;
+  }
+}

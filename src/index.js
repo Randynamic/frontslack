@@ -1,15 +1,19 @@
 import React from "react";
-import App from "./containers/App";
+import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { ConnectedRouter } from "connected-react-router";
 import Loadable from "react-loadable";
 import { render, hydrate } from "react-dom";
 import { Frontload } from "react-frontload";
 
-import "./styles/index.scss";
 import { Provider } from "react-redux";
 
 import createStore from "./store/config";
+
+import "./styles/index.scss";
+import "../node_modules/normalize.css/normalize.css";
+import "../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+import "../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 
 const { store, history } = createStore();
 

@@ -1,12 +1,11 @@
-.has-error {
-  margin: 30px;
-  border: 2px solid red;
-}
-
 .FlashMessage--error {
   color: red;
 }
 
 .FlashMessage--warning {
   color: orange;
+}
+
+.FlashMessage--info {
+  color: lightblue;
 }

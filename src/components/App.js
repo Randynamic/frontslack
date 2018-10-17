@@ -6,7 +6,7 @@ import { authenticateSession, checkSession } from "../store/auth";
 
 import Routes from "../routes";
 
-import "../styles/containers/App.scss";
+import "../styles/components/App.scss";
 
 class App extends Component {
   componentWillMount() {

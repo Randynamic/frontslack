@@ -4,7 +4,7 @@ import Helmet from "react-helmet";
 import logo from "../../static/media/images/logo.svg";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Header, Transition, FlashMessage } from "../../containers/components";
+import { Header, Transition, FlashMessage } from "../components";
 import { authenticateSession, checkSession } from "../../store/auth";
 
 const SITE_URL = "http://localhost:3000";
@@ -111,6 +111,7 @@ class Page extends Component {
         <Header
           isAuthenticated={this.props.isAuthenticated}
           current={this.props.location.pathname}
+          history={this.props.history}
         />
         {children}
       </div>
