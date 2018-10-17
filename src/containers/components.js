@@ -29,7 +29,3 @@ export const FlashMessage = props => {
   ));
   return <div>{messagesList}</div>;
 };
-
-export const Content = props => (
-  <div className={props.hasError ? "Content--error" : ""}>{props.children}</div>
-);

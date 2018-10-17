@@ -4,7 +4,6 @@ import { bindActionCreators } from "redux";
 import { withRouter } from "react-router";
 import { authenticateSession, checkSession } from "../store/auth";
 
-import { Header, Transition, FlashMessage, Content } from "./components";
 import Routes from "../routes";
 
 import "../styles/containers/App.scss";
@@ -13,24 +12,8 @@ class App extends Component {
   componentWillMount() {
     this.props.checkSession();
   }
-
   render() {
-    return (
-      <div id="app">
-        <FlashMessage {...this.props} />
-        <Transition
-          {...this.props}
-          isLoading={this.props.transitions.isLoading || false}
-        />
-        <Header
-          isAuthenticated={this.props.isAuthenticated}
-          current={this.props.location.pathname}
-        />
-        <Content id="content" hasError={this.props.flash.messages.length > 0}>
-          <Routes />
-        </Content>
-      </div>
-    );
+    return <Routes />;
   }
 }
 

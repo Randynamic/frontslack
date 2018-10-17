@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import Helmet from "react-helmet";
 import logo from "../../static/media/images/logo.svg";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Header, Transition, FlashMessage } from "../../containers/components";
+import { authenticateSession, checkSession } from "../../store/auth";
 
 const SITE_URL = "http://localhost:3000";
 
@@ -76,8 +80,12 @@ class Page extends Component {
 
   render() {
     const { children, id, className, ...rest } = this.props;
+    const rootClasses =
+      this.props.flash.messages.length > 0
+        ? [className, id + "--has-error", "has-error"].join(" ")
+        : className;
     return (
-      <div id={id} className={className}>
+      <div id={id} className={rootClasses}>
         <Helmet
           htmlAttributes={{
             lang: "en",
@@ -95,10 +103,33 @@ class Page extends Component {
           ]}
           meta={this.getMetaTags(rest, this.props.location.pathname)}
         />
+        <FlashMessage {...this.props} />
+        <Transition
+          {...this.props}
+          isLoading={this.props.transitions.isLoading || false}
+        />
+        <Header
+          isAuthenticated={this.props.isAuthenticated}
+          current={this.props.location.pathname}
+        />
         {children}
       </div>
     );
   }
 }
 
-export default withRouter(Page);
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  transitions: state.transitions,
+  flash: state.flash
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ authenticateSession, checkSession }, dispatch);
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Page)
+);

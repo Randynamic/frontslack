@@ -5,8 +5,6 @@ import { Route, Redirect } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { authenticateSession } from "../../store/auth";
 
-import GetToken from "../../routes/login/getToken";
-
 export class UnauthenticatedRoute extends Component {
   componentWillMount() {
     const params = qs.parse(this.props.location.search);
