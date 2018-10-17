@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "react-router";
-import qs from "query-string";
-import { authenticateSession } from "../store/auth";
+import { authenticateSession, checkSession } from "../store/auth";
 
 import { Header, Transition, FlashMessage, Content } from "./components";
 import Routes from "../routes";
@@ -12,8 +11,7 @@ import "../styles/containers/App.scss";
 
 class App extends Component {
   componentWillMount() {
-    const params = qs.parse(this.props.location.search);
-    this.props.authenticateSession(params.code);
+    this.props.checkSession();
   }
 
   render() {
@@ -43,7 +41,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ authenticateSession }, dispatch);
+  bindActionCreators({ authenticateSession, checkSession }, dispatch);
 
 export default withRouter(
   connect(

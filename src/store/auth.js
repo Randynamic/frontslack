@@ -5,6 +5,8 @@ export const SET_CURRENT_USER = "auth/SET_CURRENT_USER";
 export const GET_NEW_CODE = "auth/GET_NEW_CODE";
 export const GET_CODE = "auth/GET_CODE";
 export const GET_TOKEN = "auth/GET_TOKEN";
+export const TRANSITION_PENDING = "trans/PENDING";
+export const TRANSITION_FINISHED = "trans/FINISHED";
 
 const initialState = {
   isAuthenticated: false,
@@ -33,15 +35,35 @@ export default (state = initialState, action) => {
   }
 };
 
-export const authenticateSession = code => dispatch => {
+export const checkSession = () => dispatch => {
   let auth_session = Cookies.getJSON("auth_session");
-  const localCode = Cookies.get("auth_code");
   if (auth_session && auth_session.ok) {
-    return dispatch({
+    dispatch({
       type: AUTHENTICATE,
       isAuthenticated: auth_session.ok,
       currentUser: auth_session
     });
+  }
+};
+
+export const authenticateSession = code => dispatch => {
+  dispatch({
+    type: TRANSITION_PENDING,
+    isLoading: true
+  });
+  let auth_session = Cookies.getJSON("auth_session");
+  const localCode = Cookies.get("auth_code");
+  if (auth_session && auth_session.ok) {
+    dispatch({
+      type: AUTHENTICATE,
+      isAuthenticated: auth_session.ok,
+      currentUser: auth_session
+    });
+    dispatch({
+      type: TRANSITION_FINISHED,
+      isLoading: false
+    });
+    return;
   } else if (code && localCode && code === localCode) {
     dispatch({ type: GET_NEW_CODE });
     dispatch(redirectToGetCode());
@@ -92,6 +114,10 @@ export const getToken = code => dispatch => {
         dispatch({
           type: SET_CURRENT_USER,
           currentUser: result
+        });
+        dispatch({
+          type: TRANSITION_FINISHED,
+          isLoading: false
         });
       }
     })

@@ -54,7 +54,7 @@ export const getCurrentProfile = id => dispatch =>
         isLoading: false
       });
       resolve(profile);
-    }, 3000);
+    }, 500);
   });
 
 export const removeCurrentProfile = () => dispatch =>
