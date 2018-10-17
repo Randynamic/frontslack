@@ -5,7 +5,6 @@ import { Route, Redirect } from "react-router-dom";
 
 const UnauthenticatedRoute = ({ component: Component, ...rest }) => {
   let query = queryString.parse(rest.location.search);
-
   return (
     <Route
       {...rest}
