@@ -5,17 +5,7 @@ import Page from '../../components/page';
 const Dashboard = ({ currentUser }) => (
   <Page id="dashboard" title="Dashboard" noCrawl>
     <p>
-      We have a secret dashboard that only cool kids can access.<br />Notice
-      that refreshing this page will retain the logged in status!
-    </p>
-    <p>
-      <b>Name:</b> {currentUser.name}
-    </p>
-    <p>
-      <b>Email:</b> {currentUser.email}
-    </p>
-    <p>
-      <b>Password:</b> {currentUser.password}
+      <b>Session Data:</b> {currentUser.access_token}
     </p>
   </Page>
 );

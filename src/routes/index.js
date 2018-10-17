@@ -42,6 +42,12 @@ const Profile = Loadable({
   modules: ["profile"]
 });
 
+const GetToken = Loadable({
+  loader: () => import(/* webpackChunkName: "auth" */ "./login/getToken"),
+  loading: () => null,
+  modules: ["auth"]
+});
+
 export default () => (
   <Switch>
     <Route exact path="/" component={Homepage} />
@@ -49,6 +55,7 @@ export default () => (
     <Route exact path="/profile/:id" component={Profile} />
     <AuthenticatedRoute exact path="/dashboard" component={Dashboard} />
     <UnauthenticatedRoute exact path="/login" component={Login} />
+    <UnauthenticatedRoute exact path="/auth/getToken" component={GetToken} />
     <AuthenticatedRoute exact path="/logout" component={Logout} />
     <Route component={NotFound} />
   </Switch>

@@ -7,9 +7,7 @@ import { loginUser } from "../../store/auth";
 
 const Login = props => (
   <Page id="login" title="Login" description="We need to log in to stuff.">
-    <button onClick={() => props.loginUser("user@mydomain.com", "password123")}>
-      Click the button...
-    </button>
+    <button onClick={() => props.loginUser()}>Click the button...</button>
   </Page>
 );
 
