@@ -1,12 +1,11 @@
 {
-  "name": "frontslack-ssr",
+  "name": "frontslack",
   "homepage": "https://localhost",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.1.2",
+    "@babel/core": "7.1.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@svgr/webpack": "2.4.1",
@@ -14,7 +13,7 @@
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
     "babel-loader": "8.0.4",
-    "babel-plugin-dynamic-import-node": "^2.1.0",
+    "babel-plugin-dynamic-import-node": "^2.2.0",
     "babel-plugin-named-asset-import": "^0.2.2",
     "babel-preset-react-app": "^5.0.3",
     "bfj": "6.1.1",
@@ -24,7 +23,6 @@
     "compression": "^1.7.3",
     "connected-react-router": "^4.5.0",
     "cookie-parser": "^1.4.3",
-    "cross-env": "^5.2.0",
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
@@ -51,7 +49,6 @@
     "md5-file": "^4.0.0",
     "mini-css-extract-plugin": "0.4.3",
     "morgan": "^1.9.1",
-    "node-sass": "^4.9.4",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -68,8 +65,9 @@
     "react-helmet": "^5.2.0",
     "react-loadable": "^5.5.0",
     "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.0.4",
+    "react-thunk": "^1.0.0",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-mock-store": "^1.5.3",
@@ -85,24 +83,45 @@
     "workbox-webpack-plugin": "3.6.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "serve": "cross-env NODE_ENV=production node ./server/index.js"
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js",
+    "serve": "cross-env NODE_ENV=development node ./server/index.js"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"],
+  "jest": {
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "resolver": "jest-pnp-resolver",
+    "setupFiles": ["react-app-polyfill/jsdom"],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx}",
+      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx}"
+    ],
+    "testEnvironment": "jsdom",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": ["web.js", "js", "json", "web.jsx", "jsx", "node"]
+  },
+  "babel": {
+    "presets": ["react-app"]
   },
   "devDependencies": {
+    "node-sass": "^4.9.3",
     "husky": "^1.1.0",
     "prettier": "1.14.3",
     "pretty-quick": "^1.7.0"
