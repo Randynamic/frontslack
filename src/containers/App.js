@@ -13,7 +13,6 @@ import "../styles/containers/App.scss";
 class App extends Component {
   componentWillMount() {
     const params = qs.parse(this.props.location.search);
-    console.log("[ componentWillMount ]", params);
     this.props.authenticateSession(params.code);
   }
 
