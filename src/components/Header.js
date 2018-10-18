@@ -114,7 +114,10 @@ export class Header extends Component {
                 : "FrontSlack"}
             </Navbar.Heading>
             <Navbar.Divider />
-            {this.NavItems()}
+            {this.props.ui.links.privateLinks.length > 0 &&
+            this.props.ui.links.privateLinks.length > 0
+              ? this.NavItems()
+              : "No Menu Items Loaded"}
             <Navbar.Divider />
             <Button
               intent="success"
