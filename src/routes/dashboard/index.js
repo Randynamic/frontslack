@@ -45,33 +45,13 @@ export default connect(
   mapDispatchToProps
 )(
   class extends Component {
-    state = {
-      T: {
-        postTimer: undefined
-      }
-    };
-
     componentWillMount() {
       this.props.listConversationEntries();
       let i = this.props.entries.posts.length;
-      this.setState({
-        T: {
-          postTimer: setInterval(
-            () => this.props.addConversationEntry({ id: i++ }),
-            1000
-          )
-        }
-      });
+      this.props.addConversationEntry({ id: i++ });
     }
 
-    componentWillUnmount() {
-      clearInterval(this.state.T.postTimer);
-      this.setState({
-        T: {
-          postTimer: undefined
-        }
-      });
-    }
+    componentWillUnmount() {}
 
     render() {
       const userData = JSON.stringify(this.props.currentUser, null, 4);

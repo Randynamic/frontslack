@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { Button, Navbar, Alignment } from "@blueprintjs/core";
 import { uniqWith, isEqual, find } from "lodash";
+import { mainNavLinks, mainNavLinksError } from "../store/ui";
 
 import "../styles/components/Header.scss";
 
@@ -23,79 +26,45 @@ export const HeaderLink = ({ to, text, current, history }) => (
 
 export class Header extends Component {
   state = {
-    privateLinks: [
-      {
-        to: "/",
-        text: "Homepage"
-      },
-      {
-        to: "/dashboard",
-        text: "Dashboard",
-        auth: true
-      },
-      {
-        to: "/logout",
-        text: "Logout",
-        auth: true
-      }
-    ],
-    publicLinks: [
-      {
-        to: "/",
-        text: "Homepage"
-      },
-      {
-        to: "/about",
-        text: "About"
-      },
-      {
-        to: "/profile/1",
-        text: "Profile 1"
-      },
-      {
-        to: "/profile/2",
-        text: "Profile 2"
-      },
-      {
-        to: "/login",
-        text: "Login",
-        auth: false
-      },
-      {
-        to: "/dashboard",
-        text: "Dashboard",
-        auth: true
-      },
-      {
-        to: "/logout",
-        text: "Logout",
-        auth: true
-      },
-      {
-        to: "/this-is-broken",
-        text: "Broken Page"
-      }
-    ]
+    privateLinks: this.props.ui.links.privateLinks,
+    publicLinks: this.props.ui.links.publicLinks
   };
 
   isPrivate = current => {
-    const allLinks = uniqWith(
-      [...this.state.privateLinks, ...this.state.publicLinks],
-      isEqual
-    );
-    const link = find(allLinks, { to: current });
-    return link.auth;
+    if (
+      this.props.ui.links.privateLinks &&
+      this.props.ui.links.publicLinks &&
+      this.props.ui.links.privateLinks.length > 0 &&
+      this.props.ui.links.publicLinks.length > 0
+    ) {
+      const allLinks = uniqWith(
+        [
+          ...this.props.ui.links.privateLinks,
+          ...this.props.ui.links.publicLinks
+        ],
+        isEqual
+      );
+      const link = find(allLinks, { to: current });
+      return link.auth;
+    }
+    return [];
   };
 
-  LoginBtnHandler = () => {
-    this.props.history.push("/login");
+  singinBtnHandler = () => {
+    if (this.props.isAuthenticated) {
+      if (this.props.current !== "/dashboard") {
+        return this.props.history.push("/dashboard");
+      }
+      return false;
+    }
+    return this.props.history.push("/login");
   };
 
   NavItems = () => {
     let links =
       this.props.isAuthenticated && this.isPrivate(this.props.current)
-        ? this.state.privateLinks
-        : this.state.publicLinks;
+        ? this.props.ui.links.privateLinks
+        : this.props.ui.links.publicLinks;
     return links.map((link, index) => {
       const NavItem = (
         <HeaderLink
@@ -117,8 +86,21 @@ export class Header extends Component {
     });
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.ui.links.privateLinks && nextProps.ui.links.publicLinks) {
+      return true;
+    }
+    return false;
+  }
+
   componentWillMount() {
-    console.log("[componentWillMount]");
+    if (
+      !this.props.ui.links.privateLinks.length > 0 &&
+      !this.props.ui.links.publicLinks.length > 0
+    ) {
+      this.props.mainNavLinksError(this.props.isAuthenticated);
+    }
+    console.log(this);
   }
 
   render() {
@@ -137,9 +119,28 @@ export class Header extends Component {
             <Button
               intent="success"
               text={this.props.isAuthenticated ? "Go to Dashboard" : "Sign in"}
-              onClick={() => this.LoginBtnHandler()}
+              onClick={() => this.singinBtnHandler()}
               className={Alignment.LEFT}
             />
+            {this.props.flash.messages.length > 0 && (
+              <Button
+                intent="primary"
+                text={"Clear Messages"}
+                onClick={() => this.props.clearMessages()}
+                className={Alignment.LEFT}
+              />
+            )}
+            {(this.props.ui.links.privateLinks.length === 0 ||
+              this.props.ui.links.publicLinks.length === 0) && (
+              <Button
+                intent="danger"
+                text={"Reload"}
+                onClick={() =>
+                  this.props.mainNavLinks(this.props.isAuthenticated)
+                }
+                className={Alignment.LEFT}
+              />
+            )}
           </Navbar.Group>
         </Navbar>
       </header>
@@ -147,5 +148,13 @@ export class Header extends Component {
   }
 }
 
-const mapStateToProps = state => state;
-// const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapStateToProps = state => ({
+  ui: state.ui
+});
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ mainNavLinks, mainNavLinksError }, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

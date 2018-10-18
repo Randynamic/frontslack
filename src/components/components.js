@@ -1,6 +1,6 @@
 import React from "react";
 import { Header as _Header } from "./Header";
-import { Spinner } from "@blueprintjs/core";
+import { Alert, Intent, Spinner } from "@blueprintjs/core";
 
 import "../styles/components/Transition.scss";
 import "../styles/components/FlashMessages.scss";
@@ -23,12 +23,22 @@ export const Transition = props => {
 };
 
 export const FlashMessage = props => {
-  const messagesList = props.flash.messages.map(message => (
-    <div key={message.id}>
-      <div className={"FlashMessage--" + message.type}>
-        {message.id} - {message.type}: > {message.message}
-      </div>
-    </div>
+  console.log("..", props);
+  const messagesList = props.flash.messages.map((message, index) => (
+    <Alert
+      key={index}
+      {...message}
+      className={message.type}
+      cancelButtonText="Cancel"
+      confirmButtonText="Reload"
+      icon="repeat"
+      intent={Intent.DANGER}
+      isOpen={props.flash.messages.length > 0}
+      onCancel={props.clearMessages}
+      onConfirm={() => props.mainNavLinks(props.isAuthenticated)}
+    >
+      <p>{message.message}</p>
+    </Alert>
   ));
   return <div>{messagesList}</div>;
 };

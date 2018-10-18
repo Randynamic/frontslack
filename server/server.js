@@ -7,9 +7,13 @@ import path from "path";
 import forceDomain from "forcedomain";
 import Loadable from "react-loadable";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 // Our loader - this basically acts as the entry point for each page load
 import loader from "./loader";
+
+// Our API Services
+import api_routes from "./src/services/ui";
 
 // Create our express app using the port optionally specified
 const app = express();
@@ -38,9 +42,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(cookieParser());
+app.use(
+  "/api",
+  cors({
+    allowedHeaders: ["Content-Type", "isAuthorized"],
+    exposedHeaders: [],
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: true
+  })
+);
+
+api_routes.get("/", loader);
 
 // Set up homepage, static assets, and capture everything else
-app.use(express.Router().get("/", loader));
+app.use(api_routes);
 app.use(express.static(path.resolve(__dirname, "../build")));
 app.use(loader);
 

@@ -34,7 +34,8 @@ require("@babel/register")({
   plugins: [
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-object-rest-spread",
-    "dynamic-import-node",
+    "@babel/plugin-proposal-class-properties",
+    "babel-plugin-dynamic-import-node",
     "react-loadable/babel"
   ]
 });

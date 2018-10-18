@@ -6,6 +6,8 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Header, Transition, FlashMessage } from "../components";
 import { authenticateSession, checkSession } from "../../store/auth";
+import { mainNavLinks, mainNavLinksError } from "../../store/ui";
+import { clearMessages } from "../../store/flash";
 
 const SITE_URL = "http://localhost:3000";
 
@@ -112,6 +114,7 @@ class Page extends Component {
           isAuthenticated={this.props.isAuthenticated}
           current={this.props.location.pathname}
           history={this.props.history}
+          {...rest}
         />
         {children}
       </div>
@@ -122,11 +125,21 @@ class Page extends Component {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   transitions: state.transitions,
-  flash: state.flash
+  flash: state.flash,
+  ui: state.ui
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ authenticateSession, checkSession }, dispatch);
+  bindActionCreators(
+    {
+      authenticateSession,
+      checkSession,
+      mainNavLinks,
+      mainNavLinksError,
+      clearMessages
+    },
+    dispatch
+  );
 
 export default withRouter(
   connect(
