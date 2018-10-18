@@ -3,7 +3,7 @@ import { Button, Navbar, Alignment } from "@blueprintjs/core";
 
 import "../styles/components/Header.scss";
 
-const links = [
+const publicLinks = [
   {
     to: "/",
     text: "Homepage"
@@ -40,6 +40,22 @@ const links = [
     text: "Broken Page"
   }
 ];
+const privateLinks = [
+  {
+    to: "/",
+    text: "Home Page"
+  },
+  {
+    to: "/dashboard",
+    text: "Dashboard",
+    auth: true
+  },
+  {
+    to: "/logout",
+    text: "Logout",
+    auth: true
+  }
+];
 
 const isCurrent = (to, current) => {
   if (to === "/" && current === to) {
@@ -47,7 +63,6 @@ const isCurrent = (to, current) => {
   } else if (to !== "/" && current.includes(to)) {
     return true;
   }
-
   return false;
 };
 
@@ -63,6 +78,7 @@ export const Header = ({ isAuthenticated, current, history }) => {
     history.push("/login");
   };
   const NavItems = () => {
+    let links = isAuthenticated && current !== "/" ? privateLinks : publicLinks;
     return links.map((link, index) => {
       const NavItem = <HeaderLink key={index} current={current} {...link} />;
       if (link.hasOwnProperty("auth")) {
@@ -88,7 +104,7 @@ export const Header = ({ isAuthenticated, current, history }) => {
             intent="success"
             text={isAuthenticated ? "Go to Dashboard" : "Sign in"}
             onClick={() => LoginBtnHandler()}
-            className={"bp3-align-left"}
+            className={Alignment.LEFT}
           />
         </Navbar.Group>
       </Navbar>
