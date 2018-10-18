@@ -2,18 +2,19 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Page from "../../components/page";
-import { listConversationEntries } from "../../store/entries";
+import {
+  listConversationEntries,
+  addConversationEntry
+} from "../../store/entries";
 
-import { Button, Card, Elevation } from "@blueprintjs/core";
+import { Card, Elevation } from "@blueprintjs/core";
 
 import "../../styles/components/Entries.scss";
 
 const Entry = props => {
   return (
     <Card className={"Entry"} interactive={false} elevation={Elevation.TWO}>
-      <h5>
-        <a href="#">{props.title}</a>
-      </h5>
+      <h5>{props.title}</h5>
       <p>{props.content}</p>
     </Card>
   );
@@ -23,7 +24,7 @@ const Entries = props => {
   return (
     <div>
       {props.data &&
-        props.data.map(mapItem => <Entry key={mapItem.id} {...mapItem} />)}
+        props.data.map((mapItem, index) => <Entry key={index} {...mapItem} />)}
     </div>
   );
 };
@@ -34,15 +35,42 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ listConversationEntries }, dispatch);
+  bindActionCreators(
+    { listConversationEntries, addConversationEntry },
+    dispatch
+  );
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(
   class extends Component {
+    state = {
+      T: {
+        postTimer: undefined
+      }
+    };
+
     componentWillMount() {
       this.props.listConversationEntries();
+      let i = this.props.entries.posts.length;
+      this.setState({
+        T: {
+          postTimer: setInterval(
+            () => this.props.addConversationEntry({ id: i++ }),
+            1000
+          )
+        }
+      });
+    }
+
+    componentWillUnmount() {
+      clearInterval(this.state.T.postTimer);
+      this.setState({
+        T: {
+          postTimer: undefined
+        }
+      });
     }
 
     render() {
@@ -54,6 +82,7 @@ export default connect(
           </p>
           <code>{userData}</code>
           <hr />
+          <h1>Entries: {this.props.entries.posts.length}</h1>
           <Entries data={this.props.entries.posts} />
         </Page>
       );

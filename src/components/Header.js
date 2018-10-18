@@ -117,6 +117,10 @@ export class Header extends Component {
     });
   };
 
+  componentWillMount() {
+    console.log("[componentWillMount]");
+  }
+
   render() {
     return (
       <header id="header">
@@ -142,3 +146,6 @@ export class Header extends Component {
     );
   }
 }
+
+const mapStateToProps = state => state;
+// const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
