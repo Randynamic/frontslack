@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Navbar, Alignment } from "@blueprintjs/core";
 import { uniqWith, isEqual, find } from "lodash";
-import { mainNavLinks, mainNavLinksError } from "../store/ui";
+import { mainNavLinks } from "../store/ui";
 
 import "../styles/components/Header.scss";
 
@@ -98,15 +98,14 @@ export class Header extends Component {
       !this.props.ui.links.privateLinks.length > 0 &&
       !this.props.ui.links.publicLinks.length > 0
     ) {
-      this.props.mainNavLinksError(this.props.isAuthenticated);
+      this.props.mainNavLinks(this.props.isAuthenticated);
     }
-    console.log(this);
   }
 
   render() {
     return (
       <header id="header">
-        <Navbar>
+        <Navbar fixedToTop={true}>
           <Navbar.Group align={Alignment.LEFT}>
             <Navbar.Heading>
               {this.props.isAuthenticated & this.isPrivate(this.props.current)
@@ -118,32 +117,14 @@ export class Header extends Component {
             this.props.ui.links.privateLinks.length > 0
               ? this.NavItems()
               : "No Menu Items Loaded"}
-            <Navbar.Divider />
+          </Navbar.Group>
+          <Navbar.Group align={Alignment.RIGHT}>
             <Button
               intent="success"
               text={this.props.isAuthenticated ? "Go to Dashboard" : "Sign in"}
               onClick={() => this.singinBtnHandler()}
               className={Alignment.LEFT}
             />
-            {this.props.flash.messages.length > 0 && (
-              <Button
-                intent="primary"
-                text={"Clear Messages"}
-                onClick={() => this.props.clearMessages()}
-                className={Alignment.LEFT}
-              />
-            )}
-            {(this.props.ui.links.privateLinks.length === 0 ||
-              this.props.ui.links.publicLinks.length === 0) && (
-              <Button
-                intent="danger"
-                text={"Reload"}
-                onClick={() =>
-                  this.props.mainNavLinks(this.props.isAuthenticated)
-                }
-                className={Alignment.LEFT}
-              />
-            )}
           </Navbar.Group>
         </Navbar>
       </header>
@@ -155,7 +136,7 @@ const mapStateToProps = state => ({
   ui: state.ui
 });
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ mainNavLinks, mainNavLinksError }, dispatch);
+  bindActionCreators({ mainNavLinks }, dispatch);
 
 export default connect(
   mapStateToProps,

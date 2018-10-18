@@ -44,25 +44,3 @@ export const mainNavLinks = isAuthorized => dispatch => {
       );
   });
 };
-
-export const mainNavLinksError = isAuthorized => dispatch => {
-  new Promise(resolve => {
-    fetch("http://localhost:5000/api/menus/s", {
-      headers: {
-        isAuthorized: isAuthorized
-      }
-    })
-      .then(res => res.json())
-      .then(res => dispatch({ type: MAIN_NAV_LINKS, data: res.data }))
-      .catch(e =>
-        dispatch({
-          type: NEW_ERROR,
-          data: {
-            id: "no_menus_recieved",
-            type: "error",
-            message: "Please reload to retrieve the menus"
-          }
-        })
-      );
-  });
-};

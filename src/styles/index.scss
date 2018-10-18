@@ -1,6 +1,8 @@
+@import "./vars.scss";
+
 body {
   margin: 0;
-  padding: 0;
+  padding: $pt-navbar-height 0 0 0;
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

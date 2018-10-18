@@ -23,7 +23,6 @@ export const Transition = props => {
 };
 
 export const FlashMessage = props => {
-  console.log("..", props);
   const messagesList = props.flash.messages.map((message, index) => (
     <Alert
       key={index}

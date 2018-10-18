@@ -6,7 +6,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Header, Transition, FlashMessage } from "../components";
 import { authenticateSession, checkSession } from "../../store/auth";
-import { mainNavLinks, mainNavLinksError } from "../../store/ui";
+import { mainNavLinks } from "../../store/ui";
 import { clearMessages } from "../../store/flash";
 
 const SITE_URL = "http://localhost:3000";
@@ -135,7 +135,6 @@ const mapDispatchToProps = dispatch =>
       authenticateSession,
       checkSession,
       mainNavLinks,
-      mainNavLinksError,
       clearMessages
     },
     dispatch
