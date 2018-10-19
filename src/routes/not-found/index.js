@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "react-router";
+import qs from "query-string";
 
 import { newError, newWarning, clearMessages } from "../../store/flash";
 
@@ -9,8 +10,8 @@ import Page from "../../components/page";
 
 export class ErrorPage extends Component {
   componentDidMount() {
-    this.props.newError({ id: 0, message: "NEW ERROR", type: "error" });
-    this.props.newWarning({ id: 1, message: "NEW WARNING", type: "warning" });
+    const params = qs.parse(this.props.location.search);
+    this.props.newError({ id: 0, message: params.type, type: "error" });
   }
   componentWillUnmount() {
     this.props.clearMessages();

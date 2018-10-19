@@ -1,11 +1,12 @@
+import { NEW_ERROR } from "./flash";
+
 export const LIST_CONVERSATION_ENTRIES = "entries/LIST_CONVERSATIONS";
 export const ADD_CONVERSATION_ENTRY = "entries/ADD_CONVERSATIONS_ENTRY";
+export const TRANSITION_PENDING = "trans/PENDING";
+export const TRANSITION_FINISHED = "trans/FINISHED";
 
 const initialState = {
-  posts: [
-    { id: 0, title: "Title 0", content: "Content 0" },
-    { id: 1, title: "Title 1", content: "Content 1" }
-  ]
+  posts: []
 };
 
 export default (state = initialState, action) => {
@@ -19,12 +20,55 @@ export default (state = initialState, action) => {
   }
 };
 
-export const listConversationEntries = channelId => dispatch => {
+export const listConversationEntries = (channelId, token) => dispatch => {
   new Promise(resolve => {
     dispatch({
-      type: LIST_CONVERSATION_ENTRIES,
-      data: initialState.posts
+      type: TRANSITION_PENDING,
+      isLoading: true
     });
+    fetch(
+      `https://slack.com/api/conversations.history?channel=${channelId}&token=${token}`
+    )
+      .then(res => res.json())
+      .then(channelHistory => {
+        if (channelHistory.ok) {
+          const channelEntries = channelHistory.messages.map(
+            (message, index) => {
+              return {
+                id: message.bot_id,
+                title: `${message.type} @ ${message.ts}`,
+                content: message.text
+              };
+            }
+          );
+          setTimeout(() => {
+            dispatch({
+              type: LIST_CONVERSATION_ENTRIES,
+              data: channelEntries
+            });
+            dispatch({
+              type: TRANSITION_FINISHED,
+              isLoading: false
+            });
+          }, 1000);
+        } else {
+          dispatch({
+            type: LIST_CONVERSATION_ENTRIES,
+            data: null
+          });
+        }
+      })
+      .catch(e =>
+        dispatch({
+          type: NEW_ERROR,
+          data: {
+            id: "no_channel_data_recieved",
+            type: "error",
+            message:
+              "Something went wrong while retrieving the conversation history."
+          }
+        })
+      );
   });
 };
 

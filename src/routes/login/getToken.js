@@ -7,7 +7,11 @@ const GetToken = props => {
   let query = qs.parse(props.location.search);
   let outlet;
   if (!props.isAuthenticated) {
-    outlet = <Redirect to={`/login?redirect=${props.location.pathname}`} />;
+    if (query.error) {
+      outlet = <Redirect to={`/error?type=${query.error}`} />;
+    } else {
+      outlet = <Redirect to={`/login?redirect=${props.location.pathname}`} />;
+    }
   } else {
     outlet = <Redirect to={query.redirect || "/main"} />;
   }

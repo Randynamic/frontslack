@@ -7,7 +7,7 @@ import {
   addConversationEntry
 } from "../../store/entries";
 
-import { Card, Elevation } from "@blueprintjs/core";
+import { Card, Elevation, Tab, Tabs } from "@blueprintjs/core";
 
 import "../../styles/components/Entries.scss";
 
@@ -29,6 +29,23 @@ const Entries = props => {
   );
 };
 
+const EntriesTabContent = props => {
+  return (
+    <React.Fragment>
+      {props.entries.posts.length ? (
+        <h1>Entries: {props.entries.posts.length}</h1>
+      ) : (
+        <h1>Loading Channel Messages</h1>
+      )}
+
+      <Entries data={props.entries.posts} />
+    </React.Fragment>
+  );
+};
+const TabContent = props => {
+  return <h1>{props.title}</h1>;
+};
+
 const mapStateToProps = state => ({
   currentUser: state.auth.currentUser,
   entries: state.entries
@@ -45,25 +62,59 @@ export default connect(
   mapDispatchToProps
 )(
   class extends Component {
-    componentWillMount() {
-      this.props.listConversationEntries();
-      let i = this.props.entries.posts.length;
-      this.props.addConversationEntry({ id: i++ });
-    }
+    state = {
+      navbarTabId: "tab2"
+    };
+
+    componentWillMount() {}
 
     componentWillUnmount() {}
 
+    handleTabChange = navbarTabId => {
+      this.setState({ navbarTabId });
+      switch (navbarTabId) {
+        case "tab1":
+          this.props.listConversationEntries(
+            "DD3N06ZED",
+            this.props.currentUser.access_token
+          );
+          break;
+        default:
+          break;
+      }
+    };
+
     render() {
-      const userData = JSON.stringify(this.props.currentUser, null, 4);
       return (
         <Page id="dashboard" title="Dashboard" noCrawl>
-          <p>
-            <b>Session Data:</b>
-          </p>
-          <code>{userData}</code>
-          <hr />
-          <h1>Entries: {this.props.entries.posts.length}</h1>
-          <Entries data={this.props.entries.posts} />
+          <Tabs
+            id="TabsExample"
+            onChange={this.handleTabChange}
+            selectedTabId={this.state.navbarTabId}
+            vertical={true}
+          >
+            <Tab
+              id="tab1"
+              title="Channel Conversations"
+              panel={<EntriesTabContent {...this.props} />}
+            />
+            <Tab
+              id="tab2"
+              title="Create Post"
+              panel={<TabContent title={"Create Post"} />}
+            />
+            <Tab
+              id="tab3"
+              title="Tab 3"
+              panel={<TabContent title={"Tab 3"} />}
+            />
+            <Tab
+              id="tab4"
+              disabled
+              title="Disabled Tab"
+              panel={<TabContent title={"Disabled Tab"} />}
+            />
+          </Tabs>
         </Page>
       );
     }

@@ -36,12 +36,6 @@ const Logout = Loadable({
   modules: ["logout"]
 });
 
-const Profile = Loadable({
-  loader: () => import(/* webpackChunkName: "profile" */ "./profile"),
-  loading: () => null,
-  modules: ["profile"]
-});
-
 const GetToken = Loadable({
   loader: () => import(/* webpackChunkName: "auth" */ "./login/getToken"),
   loading: () => null,
@@ -51,8 +45,8 @@ const GetToken = Loadable({
 export default () => (
   <Switch>
     <Route exact path="/" component={Homepage} />
+    <Route exact path="/error" component={NotFound} />
     <Route exact path="/about" component={About} />
-    <Route exact path="/profile/:id" component={Profile} />
     <AuthenticatedRoute exact path="/dashboard" component={Dashboard} />
     <UnauthenticatedRoute exact path="/login" component={Login} />
     <UnauthenticatedRoute exact path="/auth/getToken" component={GetToken} />

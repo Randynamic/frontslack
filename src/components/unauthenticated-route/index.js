@@ -8,7 +8,9 @@ import { authenticateSession } from "../../store/auth";
 export class UnauthenticatedRoute extends Component {
   componentWillMount() {
     const params = qs.parse(this.props.location.search);
-    this.props.authenticateSession(params.code);
+    if (!params.error) {
+      return this.props.authenticateSession(params.code);
+    }
   }
 
   renderComponent({ component: Component, ...rest }) {

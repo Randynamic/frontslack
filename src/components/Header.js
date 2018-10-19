@@ -60,6 +60,10 @@ export class Header extends Component {
     return this.props.history.push("/login");
   };
 
+  singoutBtnHandler = () => {
+    return this.props.history.push("/logout");
+  };
+
   NavItems = () => {
     let links =
       this.props.isAuthenticated && this.isPrivate(this.props.current)
@@ -113,7 +117,7 @@ export class Header extends Component {
                 : "FrontSlack"}
             </Navbar.Heading>
             <Navbar.Divider />
-            {this.props.ui.links.privateLinks.length > 0 &&
+            {this.props.ui.links.publicLinks.length > 0 ||
             this.props.ui.links.privateLinks.length > 0
               ? this.NavItems()
               : "No Menu Items Loaded"}
@@ -125,6 +129,17 @@ export class Header extends Component {
               onClick={() => this.singinBtnHandler()}
               className={Alignment.LEFT}
             />
+            {this.props.isAuthenticated && (
+              <React.Fragment>
+                <Navbar.Divider />
+                <Button
+                  intent="danger"
+                  text={"Sign Out"}
+                  onClick={() => this.singoutBtnHandler()}
+                  className={Alignment.LEFT}
+                />
+              </React.Fragment>
+            )}
           </Navbar.Group>
         </Navbar>
       </header>

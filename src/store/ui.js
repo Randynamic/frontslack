@@ -1,4 +1,4 @@
-import { NEW_ERROR, CLEAR_MESSAGES } from "./flash";
+import { NEW_ERROR } from "./flash";
 export const MAIN_NAV_LINKS = "ui:nav/MAIN";
 
 const initialState = {
@@ -30,7 +30,6 @@ export const mainNavLinks = isAuthorized => dispatch => {
       .then(res => res.json())
       .then(res => {
         dispatch({ type: MAIN_NAV_LINKS, data: res.data });
-        dispatch({ type: CLEAR_MESSAGES });
       })
       .catch(e =>
         dispatch({

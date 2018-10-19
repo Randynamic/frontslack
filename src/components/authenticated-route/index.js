@@ -5,7 +5,7 @@ import { Route, Redirect } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { authenticateSession } from "../../store/auth";
 
-export class UnauthenticatedRoute extends Component {
+export class AuthenticatedRoute extends Component {
   componentWillMount() {
     const params = qs.parse(this.props.location.search);
     this.props.authenticateSession(params.code);
@@ -40,4 +40,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UnauthenticatedRoute);
+)(AuthenticatedRoute);
