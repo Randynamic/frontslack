@@ -46,16 +46,10 @@ export const listConversationEntries = (channelId, token) => dispatch => {
               type: LIST_CONVERSATION_ENTRIES,
               data: channelEntries
             });
-            dispatch({
-              type: TRANSITION_FINISHED,
-              isLoading: false
-            });
+            dispatch({ type: TRANSITION_FINISHED, isLoading: false });
           }, 1000);
         } else {
-          dispatch({
-            type: LIST_CONVERSATION_ENTRIES,
-            data: null
-          });
+          dispatch({ type: LIST_CONVERSATION_ENTRIES, data: null });
         }
       })
       .catch(e =>

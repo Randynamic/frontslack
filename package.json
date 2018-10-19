@@ -93,7 +93,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "cross-env NODE_ENV=production nodemon ./server/index.js"
+    "serve": "cross-env NODE_ENV=production nodemon --watch server ./server/index.js"
   },
   "browserslist": [
     ">0.2%",

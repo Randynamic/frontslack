@@ -105,7 +105,9 @@ export const logoutUser = () => dispatch => {
 };
 
 export const getToken = code => dispatch => {
-  const redirectUrl = "http://localhost:3000/auth/getToken";
+  // const PORT = window ? 3000 : process.env.PORT;
+  const PORT = 3000;
+  const redirectUrl = `http://localhost:${PORT}/auth/getToken`;
   const client_id = "265156972019.453766114196";
   const client_secret = "0b50651557a6545be43add555ba6f830";
   const base = "https://slack.com/api";

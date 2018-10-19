@@ -1,11 +1,8 @@
 import React from "react";
-import { Header as _Header } from "./Header";
 import { Alert, Intent, Spinner } from "@blueprintjs/core";
 
 import "../styles/components/Transition.scss";
 import "../styles/components/FlashMessages.scss";
-
-export const Header = _Header;
 
 export const Transition = props => {
   return (

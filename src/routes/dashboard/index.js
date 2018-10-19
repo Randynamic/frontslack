@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Page from "../../components/page";
+import Page from "../../components/Page";
 import {
   listConversationEntries,
   addConversationEntry
@@ -63,7 +63,7 @@ export default connect(
 )(
   class extends Component {
     state = {
-      navbarTabId: "tab2"
+      navbarTabId: "tab1"
     };
 
     componentWillMount() {}
@@ -83,6 +83,10 @@ export default connect(
           break;
       }
     };
+
+    componentDidMount() {
+      this.handleTabChange(this.state.navbarTabId);
+    }
 
     render() {
       return (

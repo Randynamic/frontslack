@@ -18,11 +18,6 @@ api_routes.get("/api/menus", (req, res) => {
         to: "/dashboard",
         text: "Dashboard",
         auth: true
-      },
-      {
-        to: "/logout",
-        text: "Logout",
-        auth: true
       }
     ];
   }

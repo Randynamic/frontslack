@@ -6,7 +6,7 @@ import qs from "query-string";
 
 import { newError, newWarning, clearMessages } from "../../store/flash";
 
-import Page from "../../components/page";
+import Page from "../../components/Page";
 
 export class ErrorPage extends Component {
   componentDidMount() {
