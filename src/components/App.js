@@ -18,7 +18,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  isAuthenticated: state.auth ? state.auth.isAuthenticated : false,
   transitions: state.transitions,
   flash: state.flash
 });

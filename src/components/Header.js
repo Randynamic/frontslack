@@ -45,7 +45,7 @@ export class Header extends Component {
         isEqual
       );
       const link = find(allLinks, { to: current });
-      return link.auth;
+      return link ? link.auth : undefined;
     }
     return [];
   };

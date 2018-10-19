@@ -47,7 +47,7 @@ const TabContent = props => {
 };
 
 const mapStateToProps = state => ({
-  currentUser: state.auth.currentUser,
+  currentUser: state.auth ? state.auth.currentUser : undefined,
   entries: state.entries
 });
 

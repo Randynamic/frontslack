@@ -32,7 +32,7 @@ export class AuthenticatedRoute extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth ? state.auth.isAuthenticated : false
 });
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ authenticateSession }, dispatch);
