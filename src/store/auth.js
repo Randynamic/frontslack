@@ -82,12 +82,22 @@ export const authenticateSession = code => dispatch => {
 };
 
 export const redirectToGetCode = () => dispatch => {
-  try {
-    window.location.href =
-      "https://frontmen.slack.com/oauth?client_id=265156972019.453766114196&redirect_uri=&state=&scope=channels:history,groups:history,mpim:history,im:history&team=&install_redirect=&single_channel=0";
-  } catch (e) {
-    console.log(e);
-  }
+  // if (!process) {
+  //   try {
+  // window.location.href =
+  //   "https://frontmen.slack.com/oauth?client_id=265156972019.453766114196&redirect_uri=&state=&scope=channels:history,groups:history,mpim:history,im:history&team=&install_redirect=&single_channel=0";
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
+  var script = document.createElement("script");
+  script.innerHTML = `window.location.href =
+        "https://frontmen.slack.com/oauth?client_id=265156972019.453766114196&redirect_uri=&state=&scope=channels:history,groups:history,mpim:history,im:history&team=&install_redirect=&single_channel=0";`;
+  document.head.appendChild(script);
+};
+
+export const setCurrentSession = session => dispatch => {
+  dispatch({ type: SET_CURRENT_USER, currentUser: session });
 };
 
 export const logoutUser = () => dispatch => {
@@ -105,8 +115,12 @@ export const logoutUser = () => dispatch => {
 };
 
 export const getToken = code => dispatch => {
-  // const PORT = window ? 3000 : process.env.PORT;
-  const PORT = 3000;
+  let PORT = process.env.PORT;
+  try {
+    PORT = window ? 3000 : process.env.PORT;
+  } catch (e) {
+    PORT = process.env.PORT;
+  }
   const redirectUrl = `http://localhost:${PORT}/auth/getToken`;
   const client_id = "265156972019.453766114196";
   const client_secret = "0b50651557a6545be43add555ba6f830";
@@ -123,10 +137,7 @@ export const getToken = code => dispatch => {
         dispatch(redirectToGetCode());
       } else {
         Cookies.set("auth_session", result);
-        dispatch({
-          type: SET_CURRENT_USER,
-          currentUser: result
-        });
+        dispatch(setCurrentSession(result));
         dispatch({
           type: TRANSITION_FINISHED,
           isLoading: false

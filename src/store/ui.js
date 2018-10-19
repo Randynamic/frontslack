@@ -21,7 +21,12 @@ export default (state = initialState, action) => {
 };
 
 export const mainNavLinks = isAuthorized => dispatch => {
-  const PORT = window ? 5000 : process.env.PORT;
+  let PORT = process.env.PORT;
+  try {
+    PORT = window ? 5000 : process.env.PORT;
+  } catch (e) {
+    PORT = process.env.PORT;
+  }
   new Promise(resolve => {
     fetch(`http://localhost:${PORT}/api/menus`, {
       headers: {
