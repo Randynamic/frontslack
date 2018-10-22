@@ -109,10 +109,16 @@ export const logoutUser = () => dispatch => {
 export const getToken = code => dispatch => {
   let PORT = process.env.PORT;
   try {
-    PORT = window ? 3000 : process.env.PORT;
+    PORT = window ? 5000 : process.env.PORT;
   } catch (e) {
     PORT = process.env.PORT;
   }
+  /**
+   *
+   * This is absolutely not done CREDS hardcoded,
+   * for the sake of the demo...
+   *
+   */
   const redirectUrl = `http://localhost:${PORT}/auth/getToken`;
   const client_id = "265156972019.453766114196";
   const client_secret = "0b50651557a6545be43add555ba6f830";

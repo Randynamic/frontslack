@@ -10,7 +10,7 @@ import { authenticateSession, checkSession } from "../../store/auth";
 import { mainNavLinks } from "../../store/ui";
 import { clearMessages } from "../../store/flash";
 
-const SITE_URL = "http://localhost:3000";
+const SITE_URL = "http://localhost:5000";
 
 const defaultTitle = "Slack App";
 const defaultDescription = "SlackApp Desc";
