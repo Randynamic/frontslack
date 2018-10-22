@@ -47,7 +47,7 @@ export default async (req, res, next) => {
     data = data.replace("</head>", `${meta}</head>`);
     data = data.replace(
       '<div id="root"></div>',
-      `111<div id="root">${body}</div><script>window.__PRELOADED_STATE__ = ${state}</script>`
+      `<div id="root">${body}</div><script>window.__PRELOADED_STATE__ = ${state}</script>`
     );
     data = data.replace("</body>", scripts.join("") + "</body>");
     return data;
