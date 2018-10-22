@@ -9,8 +9,8 @@ class AsyncComp extends Component {
   }
 }
 
-export default () => (
+export default props => (
   <Page id="homepage">
-    <AsyncComp />
+    <AsyncComp {...props} />
   </Page>
 );
