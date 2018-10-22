@@ -1,11 +1,16 @@
-import React from "react";
+import React, { Component } from "react";
 import Page from "../../components/Page";
 
 import logo from "../../static/media/images/logo.svg";
 
+class AsyncComp extends Component {
+  render() {
+    return <h1>Async Comp</h1>;
+  }
+}
+
 export default () => (
   <Page id="homepage">
-    <p>Here's our homepage. All are welcome.</p>
-    <img src={logo} alt="Homepage" style={{ width: "400px" }} />
+    <AsyncComp />
   </Page>
 );

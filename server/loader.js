@@ -82,8 +82,43 @@ export default (req, res) => {
         data for that page. We take all that information and compute the appropriate state to send to the user. This is
         then loaded into the correct components and sent as a Promise to be handled below.
       */
-      frontloadServerRender(() =>
-        renderToString(
+      console.log("path.resolve");
+      frontloadServerRender(() => {
+        console.log("frontloadServerRender");
+        // return new Promise((resolve, reject) => {
+        //   const P1 = new Promise((resolve, reject) => {
+        //     fetch(`http://localhost:5000/api/menus`, {
+        //       headers: {
+        //         isAuthorized: true
+        //       }
+        //     })
+        //       .then(res => res.json())
+        //       .then(res => {
+        //         store.dispatch({
+        //           type: "ui:nav/MAIN",
+        //           data: res.data
+        //         });
+        //         resolve(res);
+        //       })
+        //       .catch(e => {
+        //         // store.dispatch({
+        //         //   type: "messages:errors/NEW",
+        //         //   data: {
+        //         //     id: "no_menus_recieved",
+        //         //     type: "error",
+        //         //     message: "Please reload to retrieve the menus"
+        //         //   }
+        //         // });
+        //         reject(e);
+        //       });
+        //   });
+        //   const P2 = new Promise((resolve, reject) => {
+        //     setTimeout(() => resolve([1, 2, 3]), 2000);
+        //   });
+        //   Promise.all([P1, P2]).then(result => {
+        // console.log("\n\n\nPROMISES ENDED\n\n\n", result);
+        //     resolve(
+        return renderToString(
           <Loadable.Capture report={m => modules.push(m)}>
             <Provider store={store}>
               <StaticRouter location={req.url} context={context}>
@@ -93,54 +128,59 @@ export default (req, res) => {
               </StaticRouter>
             </Provider>
           </Loadable.Capture>
-        )
-      ).then(routeMarkup => {
-        if (context.url) {
-          // If context has a url property, then we need to handle a redirection in Redux Router
-          res.writeHead(302, {
-            Location: context.url
-          });
+        );
+        //   );
+        // });
+        // });
+      })
+        .then(routeMarkup => {
+          if (context.url) {
+            // If context has a url property, then we need to handle a redirection in Redux Router
+            res.writeHead(302, {
+              Location: context.url
+            });
 
-          res.end();
-        } else {
-          // Otherwise, we carry on...
+            res.end();
+          } else {
+            // Otherwise, we carry on...
 
-          // Let's give ourself a function to load all our page-specific JS assets for code splitting
-          const extractAssets = (assets, chunks) =>
-            Object.keys(assets)
-              .filter(asset => chunks.indexOf(asset.replace(".js", "")) > -1)
-              .map(k => assets[k]);
+            // Let's give ourself a function to load all our page-specific JS assets for code splitting
+            const extractAssets = (assets, chunks) =>
+              Object.keys(assets)
+                .filter(asset => chunks.indexOf(asset.replace(".js", "")) > -1)
+                .map(k => assets[k]);
 
-          // Let's format those assets into pretty <script> tags
-          const extraChunks = extractAssets(manifest, modules).map(
-            c =>
-              `<script type="text/javascript" src="/${c.replace(
-                /^\//,
-                ""
-              )}"></script>`
-          );
+            // Let's format those assets into pretty <script> tags
+            const extraChunks = extractAssets(manifest, modules).map(
+              c =>
+                `<script type="text/javascript" src="/${c.replace(
+                  /^\//,
+                  ""
+                )}"></script>`
+            );
 
-          // We need to tell Helmet to compute the right meta tags, title, and such
-          const helmet = Helmet.renderStatic();
+            // We need to tell Helmet to compute the right meta tags, title, and such
+            const helmet = Helmet.renderStatic();
 
-          // NOTE: Disable if you desire
-          // Let's output the title, just to see SSR is working as intended
-          console.log("\n\n\nTHE TITLE\n\n\n", helmet.title.toString());
+            // NOTE: Disable if you desire
+            // Let's output the title, just to see SSR is working as intended
+            console.log("\n\n\nTHE TITLE\n\n\n", helmet.title.toString());
 
-          // Pass all this nonsense into our HTML formatting function above
-          const html = injectHTML(htmlData, {
-            html: helmet.htmlAttributes.toString(),
-            title: helmet.title.toString(),
-            meta: helmet.meta.toString(),
-            body: routeMarkup,
-            scripts: extraChunks,
-            state: JSON.stringify(store.getState()).replace(/</g, "\\u003c")
-          });
+            // Pass all this nonsense into our HTML formatting function above
+            const html = injectHTML(htmlData, {
+              html: helmet.htmlAttributes.toString(),
+              title: helmet.title.toString(),
+              meta: helmet.meta.toString(),
+              body: routeMarkup,
+              scripts: extraChunks,
+              state: JSON.stringify(store.getState()).replace(/</g, "\\u003c")
+            });
 
-          // We have all the final HTML, let's send it to the user already!
-          res.send(html);
-        }
-      });
+            // We have all the final HTML, let's send it to the user already!
+            res.send(html);
+          }
+        })
+        .catch(e => console.log(e));
     }
   );
 };

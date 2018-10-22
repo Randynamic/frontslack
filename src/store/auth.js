@@ -82,14 +82,6 @@ export const authenticateSession = code => dispatch => {
 };
 
 export const redirectToGetCode = () => dispatch => {
-  // if (!process) {
-  //   try {
-  // window.location.href =
-  //   "https://frontmen.slack.com/oauth?client_id=265156972019.453766114196&redirect_uri=&state=&scope=channels:history,groups:history,mpim:history,im:history&team=&install_redirect=&single_channel=0";
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
   var script = document.createElement("script");
   script.innerHTML = `window.location.href =
         "https://frontmen.slack.com/oauth?client_id=265156972019.453766114196&redirect_uri=&state=&scope=channels:history,groups:history,mpim:history,im:history&team=&install_redirect=&single_channel=0";`;
