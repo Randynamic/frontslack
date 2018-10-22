@@ -12,6 +12,7 @@
     "@babel/register": "^7.0.0",
     "@blueprintjs/core": "^3.7.0",
     "@svgr/webpack": "2.4.1",
+    "axios": "^0.18.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
@@ -96,7 +97,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "cross-env NODE_ENV=production nodemon --watch server ./server/index.js"
+    "serve": "cross-env NODE_ENV=production nodemon --watch server ./server/index.js",
+    "curl": "curl http://localhost:5000 --user-agent \"Googlebot/2.1\" -v"
   },
   "browserslist": [
     ">0.2%",

@@ -9,6 +9,7 @@ import Loadable from "react-loadable";
 import Helmet from "react-helmet";
 
 import fetch from "isomorphic-fetch";
+import axios from "axios";
 
 import createStore from "../src/store/config";
 import App from "../src/components/App";
@@ -72,18 +73,18 @@ export default async (req, res, next) => {
   const getAsyncData = store =>
     new Promise((resolve, reject) => {
       const P1 = new Promise((resolve, reject) => {
-        fetch(`http://localhost:5000/api/menus`, {
+        axios(`http://localhost:5000/api/menus`, {
           headers: {
             isAuthorized: true
           }
         })
-          .then(res => res.json())
           .then(res => {
-            store.dispatch({
-              type: "ui:nav/MAIN",
-              data: res.data
-            });
-            resolve(res);
+            if (res.data.ok) {
+              store.dispatch({ type: "ui:nav/MAIN", data: res.data.data });
+              return resolve(res);
+            }
+            // dispatch error case nav menu
+            reject();
           })
           .catch(e => {
             reject(e);
