@@ -74,10 +74,12 @@ export default connect(
       this.setState({ navbarTabId });
       switch (navbarTabId) {
         case "tab1":
-          this.props.listConversationEntries(
-            "DD3N06ZED",
-            this.props.currentUser.access_token
-          );
+          if (!this.state.entries || this.state.entries) {
+            this.props.listConversationEntries(
+              "DD3N06ZED",
+              this.props.currentUser.access_token
+            );
+          }
           break;
         default:
           break;

@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
 };
 
 export const listConversationEntries = (channelId, token) => dispatch => {
-  return new Promise(resolve => {
+  new Promise(resolve => {
     dispatch({
       type: TRANSITION_PENDING,
       isLoading: true
