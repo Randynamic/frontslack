@@ -16,6 +16,12 @@ import App from "../src/components/App";
 import manifest from "../build/asset-manifest.json";
 
 import { setCurrentSession, logoutUser } from "../src/store/auth";
+import { listConversationEntries } from "../src/store/entries";
+
+export const LIST_CONVERSATION_ENTRIES = "entries/LIST_CONVERSATIONS";
+export const ADD_CONVERSATION_ENTRY = "entries/ADD_CONVERSATIONS_ENTRY";
+export const TRANSITION_PENDING = "trans/PENDING";
+export const TRANSITION_FINISHED = "trans/FINISHED";
 
 // import ReactCC from "react-component-caching";
 // const Memcached = require("memcached");
@@ -72,7 +78,7 @@ export default async (req, res, next) => {
 
   const getAsyncData = store =>
     new Promise((resolve, reject) => {
-      const P1 = new Promise((resolve, reject) => {
+      const Promise_Menus = new Promise((resolve, reject) => {
         axios(`http://localhost:5000/api/menus`, {
           headers: {
             isAuthorized: true
@@ -90,10 +96,49 @@ export default async (req, res, next) => {
             reject(e);
           });
       });
-      const P2 = new Promise((resolve, reject) => {
-        setTimeout(() => resolve([1, 2, 3]), 100);
+      const Promise_Conversations = new Promise((resolve, reject) => {
+        if ("auth_session" in req.cookies) {
+          const sessionData = JSON.parse(req.cookies.auth_session);
+          const channelId = "DD3N06ZED";
+          const token = sessionData.access_token;
+          axios(
+            `https://slack.com/api/conversations.history?channel=${channelId}&token=${token}`
+          )
+            .then(channelHistory => {
+              if (channelHistory.data.ok) {
+                const channelEntries = channelHistory.data.messages.map(
+                  (message, index) => {
+                    return {
+                      id: message.bot_id,
+                      title: `${message.type} @ ${message.ts}`,
+                      content: message.text
+                    };
+                  }
+                );
+                store.dispatch({
+                  type: LIST_CONVERSATION_ENTRIES,
+                  data: channelEntries
+                });
+                store.dispatch({ type: TRANSITION_FINISHED, isLoading: false });
+                resolve(channelEntries);
+              } else {
+                store.dispatch({ type: LIST_CONVERSATION_ENTRIES, data: null });
+              }
+            })
+            .catch(e =>
+              store.dispatch({
+                type: NEW_ERROR,
+                data: {
+                  id: "no_channel_data_recieved",
+                  type: "error",
+                  message:
+                    "Something went wrong while retrieving the conversation history."
+                }
+              })
+            );
+        }
       });
-      Promise.all([P1, P2]).then(result => {
+      Promise.all([Promise_Menus, Promise_Conversations]).then(result => {
         resolve(result);
       });
     });

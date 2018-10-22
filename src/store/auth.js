@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import axios from "axios";
 
 import { NEW_INFO } from "./flash";
 
@@ -127,24 +128,26 @@ export const getToken = code => dispatch => {
   const base = "https://slack.com/api";
 
   const url = `${base}/oauth.access?client_id=${client_id}&client_secret=${client_secret}&code=${code}&redirect_uri=${redirectUrl}`;
-  return fetch(url)
-    .then(results => {
-      return results.json();
-    })
-    .then(result => {
-      if (!result.ok) {
-        dispatch({ type: GET_NEW_CODE });
-        dispatch(redirectToGetCode());
-      } else {
-        Cookies.set("auth_session", result);
-        dispatch(setCurrentSession(result));
-        dispatch({
-          type: TRANSITION_FINISHED,
-          isLoading: false
-        });
-      }
-    })
-    .catch(e => {
-      console.log("[ SESSION REJECTED ]", e);
-    });
+  return (
+    axios(url)
+      // .then(results => {
+      //   return results.json();
+      // })
+      .then(result => {
+        if (!result.data.ok) {
+          dispatch({ type: GET_NEW_CODE });
+          dispatch(redirectToGetCode());
+        } else {
+          Cookies.set("auth_session", result.data);
+          dispatch(setCurrentSession(result.data));
+          dispatch({
+            type: TRANSITION_FINISHED,
+            isLoading: false
+          });
+        }
+      })
+      .catch(e => {
+        console.log("[ SESSION REJECTED ]", e);
+      })
+  );
 };

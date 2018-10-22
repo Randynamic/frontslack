@@ -1,5 +1,5 @@
 import { NEW_ERROR } from "./flash";
-
+import axios from "axios";
 export const LIST_CONVERSATION_ENTRIES = "entries/LIST_CONVERSATIONS";
 export const ADD_CONVERSATION_ENTRY = "entries/ADD_CONVERSATIONS_ENTRY";
 export const TRANSITION_PENDING = "trans/PENDING";
@@ -21,18 +21,18 @@ export default (state = initialState, action) => {
 };
 
 export const listConversationEntries = (channelId, token) => dispatch => {
-  new Promise(resolve => {
+  return new Promise(resolve => {
     dispatch({
       type: TRANSITION_PENDING,
       isLoading: true
     });
-    fetch(
+    axios(
       `https://slack.com/api/conversations.history?channel=${channelId}&token=${token}`
     )
-      .then(res => res.json())
+      // .then(res => res.json())
       .then(channelHistory => {
-        if (channelHistory.ok) {
-          const channelEntries = channelHistory.messages.map(
+        if (channelHistory.data.ok) {
+          const channelEntries = channelHistory.data.messages.map(
             (message, index) => {
               return {
                 id: message.bot_id,
@@ -41,13 +41,14 @@ export const listConversationEntries = (channelId, token) => dispatch => {
               };
             }
           );
-          setTimeout(() => {
-            dispatch({
-              type: LIST_CONVERSATION_ENTRIES,
-              data: channelEntries
-            });
-            dispatch({ type: TRANSITION_FINISHED, isLoading: false });
-          }, 1000);
+          // setTimeout(() => {
+          dispatch({
+            type: LIST_CONVERSATION_ENTRIES,
+            data: channelEntries
+          });
+          dispatch({ type: TRANSITION_FINISHED, isLoading: false });
+          resolve(channelEntries);
+          // }, 1000);
         } else {
           dispatch({ type: LIST_CONVERSATION_ENTRIES, data: null });
         }
