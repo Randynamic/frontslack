@@ -95,7 +95,10 @@ export class NavMenu extends Component {
   }
 
   componentWillMount() {
-    if (this.state.publicLinks.length === 0 && this.state.retry) {
+    if (
+      this.state.publicLinks.length === 0 ||
+      (this.props.isAuthenticated && this.state.privateLinks.length === 0)
+    ) {
       this.props.mainNavLinks(this.props.isAuthenticated);
     }
   }

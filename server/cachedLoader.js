@@ -78,19 +78,22 @@ export default async (req, res, next) => {
 
   const getAsyncData = store =>
     new Promise((resolve, reject) => {
+      const isAuthorized = store.getState().auth
+        ? store.getState().auth.isAuthenticated
+        : false;
       const Promise_Menus = new Promise((resolve, reject) => {
         axios(`http://localhost:5000/api/menus`, {
           headers: {
-            isAuthorized: true
+            isAuthorized: isAuthorized
           }
         })
           .then(res => {
             if (res.data.ok) {
               store.dispatch({ type: "ui:nav/MAIN", data: res.data.data });
-              return resolve(res);
+              return resolve(res.data.data);
             }
             // dispatch error case nav menu
-            reject();
+            reject({ e: 1 });
           })
           .catch(e => {
             reject(e);
@@ -136,6 +139,8 @@ export default async (req, res, next) => {
                 }
               })
             );
+        } else {
+          resolve(null);
         }
       });
       Promise.all([Promise_Menus, Promise_Conversations]).then(result => {
