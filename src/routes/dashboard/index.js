@@ -74,7 +74,7 @@ export default connect(
       this.setState({ navbarTabId });
       switch (navbarTabId) {
         case "tab1":
-          if (!this.state.entries || this.state.entries) {
+          if (!this.state.entries || this.state.entries.length === 0) {
             this.props.listConversationEntries(
               "DD3N06ZED",
               this.props.currentUser.access_token
