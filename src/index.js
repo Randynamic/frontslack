@@ -4,7 +4,6 @@ import * as serviceWorker from "./serviceWorker";
 import { ConnectedRouter } from "connected-react-router";
 import Loadable from "react-loadable";
 import { render, hydrate } from "react-dom";
-import { Frontload } from "react-frontload";
 
 import { Provider } from "react-redux";
 

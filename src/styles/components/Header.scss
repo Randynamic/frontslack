@@ -1,7 +1,10 @@
-#links li a {
-  font-weight: normal;
-}
-
-#links li.current a {
-  font-weight: bold;
+.Header {
+  text-decoration: none;
+  &__Link {
+    @extend .Header;
+    font-weight: normal;
+    &--active {
+      font-weight: bold;
+    }
+  }
 }

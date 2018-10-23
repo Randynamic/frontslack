@@ -1,4 +1,4 @@
-import express from "express";
+const express = require("express");
 
 express.Router();
 const api_routes = express.Router();
@@ -39,4 +39,4 @@ api_routes.get("/api/menus", (req, res) => {
   res.json({ ok: true, data: links });
 });
 
-export default api_routes;
+module.exports = api_routes;

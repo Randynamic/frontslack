@@ -7,16 +7,19 @@
   background: rgba(0, 0, 0, 0.25);
   z-index: 9;
 
-  &.Transition--deactive {
+  &--active {
+    @extend .Transition;
+  }
+
+  &--deactive {
+    @extend .Transition;
     display: none;
-
-    .Transition--loader {
+  }
+  &__loader {
+    height: 100vh;
+    display: grid;
+    &__bp3-spinner {
       height: 100vh;
-      display: grid;
-
-      .bp3-spinner {
-        height: 100vh;
-      }
     }
   }
 }

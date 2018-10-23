@@ -82,7 +82,7 @@ export default async (req, res, next) => {
         ? store.getState().auth.isAuthenticated
         : false;
       const Promise_Menus = new Promise((resolve, reject) => {
-        axios(`http://localhost:5000/api/menus`, {
+        axios(`http://localhost:4000/api/menus`, {
           headers: {
             isAuthorized: isAuthorized
           }

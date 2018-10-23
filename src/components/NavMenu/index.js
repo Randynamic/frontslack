@@ -15,7 +15,10 @@ const isCurrent = (to, current) => {
 export const NavItemLink = ({ to, text, current, history }) => (
   <Button
     onClick={() => history.push(to)}
-    className={"bp3-minimal " + (isCurrent(to, current) ? "current" : "")}
+    className={
+      "bp3-minimal " +
+      (isCurrent(to, current) ? "Header__Link--active" : "Header__Link")
+    }
     text={text}
   />
 );

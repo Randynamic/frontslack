@@ -10,7 +10,7 @@ import "../../styles/components/Header.scss";
 export class Header extends Component {
   render() {
     return (
-      <header id="header">
+      <header className={"Header"}>
         <NavMenu {...this.props} />
       </header>
     );

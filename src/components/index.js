@@ -7,12 +7,11 @@ import "../styles/components/FlashMessages.scss";
 export const Transition = props => {
   return (
     <div
-      className={[
-        "Transition",
+      className={
         props.isLoading ? "Transition--active" : "Transition--deactive"
-      ].join(" ")}
+      }
     >
-      <div className={"Transition--loader"}>
+      <div className={"Transition__loader"}>
         <Spinner size={70} />
       </div>
     </div>

@@ -110,12 +110,7 @@ export const logoutUser = () => dispatch => {
 };
 
 export const getToken = code => dispatch => {
-  let PORT = process.env.PORT;
-  try {
-    PORT = window ? 5000 : process.env.PORT;
-  } catch (e) {
-    PORT = process.env.PORT;
-  }
+  const PORT = process.env.PORT || 3000;
   /**
    *
    * This is absolutely not done CREDS hardcoded,
