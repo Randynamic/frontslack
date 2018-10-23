@@ -74,12 +74,10 @@ export default connect(
       this.setState({ navbarTabId });
       switch (navbarTabId) {
         case "tab1":
-          if (!this.state.entries || this.state.entries.length === 0) {
-            this.props.listConversationEntries(
-              "DD3N06ZED",
-              this.props.currentUser.access_token
-            );
-          }
+          this.props.listConversationEntries(
+            "DD3N06ZED",
+            this.props.currentUser.access_token
+          );
           break;
         default:
           break;
@@ -87,7 +85,12 @@ export default connect(
     };
 
     componentDidMount() {
-      this.handleTabChange(this.state.navbarTabId);
+      if (
+        (!this.props.entries && !this.props.entries.posts) ||
+        this.props.entries.posts.length === 0
+      ) {
+        this.handleTabChange(this.state.navbarTabId);
+      }
     }
 
     render() {
