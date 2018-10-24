@@ -12,6 +12,8 @@ const isCurrent = (to, current) => {
   return false;
 };
 
+// TODO I would replace text by children as that is the more common way to use html elements/components
+// Also would rename the component as it's not a link but a button
 export const NavItemLink = ({ to, text, current, history }) => (
   <Button
     onClick={() => history.push(to)}
@@ -31,6 +33,7 @@ export class NavMenu extends Component {
   };
 
   NavItems = () => {
+    // TODO const?
     let links =
       this.props.isAuthenticated && this.isPrivate(this.props.current)
         ? this.props.ui.links.privateLinks
@@ -76,6 +79,7 @@ export class NavMenu extends Component {
     return [];
   };
 
+// TODO I guess a small typo signin :-P
   singinBtnHandler = () => {
     if (this.props.isAuthenticated) {
       if (this.props.current !== "/dashboard") {
