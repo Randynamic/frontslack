@@ -70,7 +70,7 @@ export const authenticateSession = code => async dispatch => {
   } else if (code && localCode && code === localCode) {
     dispatch({ type: GET_NEW_CODE });
     dispatch(redirectToGetCode());
-    return 3;
+    return false;
   } else if (code) {
     return new Promise((resolve, reject) => {
       axios(`http://localhost:4000/api/auth/getToken?code=${code}`)
@@ -96,7 +96,7 @@ export const authenticateSession = code => async dispatch => {
   } else {
     dispatch({ type: GET_CODE });
     dispatch(redirectToGetCode());
-    return 1;
+    return false;
   }
 };
 
