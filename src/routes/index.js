@@ -45,7 +45,6 @@ const GetToken = Loadable({
 export default () => (
   <Switch>
     <Route exact path="/" component={Homepage} />
-    <Route exact path="/error" component={NotFound} />
     <Route exact path="/about" component={About} />
     <AuthenticatedRoute exact path="/dashboard" component={Dashboard} />
     <UnauthenticatedRoute exact path="/login" component={Login} />
