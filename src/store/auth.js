@@ -49,7 +49,7 @@ export const checkSession = () => dispatch => {
   }
 };
 
-export const authenticateSession = code => dispatch => {
+export const authenticateSession = code => async dispatch => {
   dispatch({
     type: TRANSITION_PENDING,
     isLoading: true
@@ -66,19 +66,37 @@ export const authenticateSession = code => dispatch => {
       type: TRANSITION_FINISHED,
       isLoading: false
     });
-    return;
+    return auth_session;
   } else if (code && localCode && code === localCode) {
     dispatch({ type: GET_NEW_CODE });
     dispatch(redirectToGetCode());
-    return;
+    return 3;
   } else if (code) {
-    dispatch({ type: GET_TOKEN });
-    dispatch(getToken(code));
-    return;
+    return new Promise((resolve, reject) => {
+      axios(`http://localhost:4000/api/auth/getToken?code=${code}`)
+        .then(result => {
+          if (!result.data.ok) {
+            dispatch({ type: GET_NEW_CODE });
+            dispatch(redirectToGetCode());
+            reject(result.data);
+          } else {
+            Cookies.set("auth_session", result.data);
+            dispatch(setCurrentSession(result.data));
+            dispatch({
+              type: TRANSITION_FINISHED,
+              isLoading: false
+            });
+            resolve(result.data);
+          }
+        })
+        .catch(e => {
+          reject(e.data);
+        });
+    });
   } else {
     dispatch({ type: GET_CODE });
     dispatch(redirectToGetCode());
-    return;
+    return 1;
   }
 };
 
@@ -86,7 +104,7 @@ export const redirectToGetCode = () => dispatch => {
   if (typeof navigator !== "undefined") {
     var script = document.createElement("script");
     script.innerHTML = `window.location.href =
-					"https://frontmen.slack.com/oauth?client_id=265156972019.453766114196&redirect_uri=&state=&scope=channels:history,groups:history,mpim:history,im:history&team=&install_redirect=&single_channel=0";`;
+    			"https://frontmen.slack.com/oauth?client_id=265156972019.453766114196&redirect_uri=&state=&scope=channels:history,groups:history,mpim:history,im:history&team=&install_redirect=&single_channel=0";`;
     document.head.appendChild(script);
   }
 };
@@ -107,42 +125,4 @@ export const logoutUser = () => dispatch => {
     type: NEW_INFO,
     data: { id: 1, message: "Logout Successful", type: "info", autoHide: 5 }
   });
-};
-
-export const getToken = code => dispatch => {
-  const PORT = process.env.PORT || 3000;
-  /**
-   *
-   * This is absolutely not done CREDS hardcoded,
-   * for the sake of the demo...
-   *
-   */
-  const redirectUrl = `http://localhost:${PORT}/auth/getToken`;
-  const client_id = "265156972019.453766114196";
-  const client_secret = "0b50651557a6545be43add555ba6f830";
-  const base = "https://slack.com/api";
-
-  const url = `${base}/oauth.access?client_id=${client_id}&client_secret=${client_secret}&code=${code}&redirect_uri=${redirectUrl}`;
-  return (
-    axios(url)
-      // .then(results => {
-      //   return results.json();
-      // })
-      .then(result => {
-        if (!result.data.ok) {
-          dispatch({ type: GET_NEW_CODE });
-          dispatch(redirectToGetCode());
-        } else {
-          Cookies.set("auth_session", result.data);
-          dispatch(setCurrentSession(result.data));
-          dispatch({
-            type: TRANSITION_FINISHED,
-            isLoading: false
-          });
-        }
-      })
-      .catch(e => {
-        console.log("[ SESSION REJECTED ]", e);
-      })
-  );
 };

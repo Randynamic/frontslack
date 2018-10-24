@@ -6,11 +6,39 @@ import { bindActionCreators } from "redux";
 import { authenticateSession } from "../../store/auth";
 
 export class UnauthenticatedRoute extends Component {
+  state = {
+    isAuthenticated: undefined,
+    check: false
+  };
+
   componentWillMount() {
-    const params = qs.parse(this.props.location.search);
-    if (!params.error) {
-      return this.props.authenticateSession(params.code);
+    this.setState({ isAuthenticated: this.props.isAuthenticated });
+  }
+
+  componentDidMount() {
+    if (!this.props.isAuthenticated) {
+      this.setState({
+        check: true
+      });
     }
+  }
+
+  async shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.check && !this.props.isAuthenticated) {
+      nextState.check = false;
+      const code = qs.parse(nextProps.location.search).code;
+      await this.props.authenticateSession(code).then(session => {
+        if (session && session.ok) {
+          nextState.isAuthenticated = true;
+        } else {
+          nextState.isAuthenticated = false;
+        }
+      });
+    }
+    if (nextState.isAuthenticated) {
+      return true;
+    }
+    return false;
   }
 
   renderComponent({ component: Component, ...rest }) {
@@ -30,7 +58,11 @@ export class UnauthenticatedRoute extends Component {
   }
 
   render() {
-    return this.renderComponent(this.props);
+    if (this.props.isAuthenticated) {
+      return this.renderComponent(this.props);
+    } else {
+      return <div>Authenticating...</div>;
+    }
   }
 }
 

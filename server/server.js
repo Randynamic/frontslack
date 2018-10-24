@@ -12,7 +12,7 @@ import cacheLoader from "./cachedLoader";
 import api_routes from "./src/services/ui";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.NODE_ENV === "production" ? 5000 : 3000;
 
 app.use(compression());
 app.use(bodyParser.json());

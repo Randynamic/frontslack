@@ -4,6 +4,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const api_auth_routes = require("./src/services/auth");
 const api_routes = require("./src/services/ui");
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(
   })
 );
 
+app.use(api_auth_routes);
 app.use(api_routes);
 
 app.listen(PORT, console.log(`App listening on port ${PORT}!`));

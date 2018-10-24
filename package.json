@@ -97,7 +97,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "cross-env NODE_ENV=production nodemon --watch server ./server/index.js",
-    "api": "cross-env NODE_ENV=production nodemon ./server/api.js",
+    "api:prod": "cross-env NODE_ENV=production nodemon ./server/api.js",
+    "api:dev": "cross-env NODE_ENV=development nodemon ./server/api.js",
     "curl": "curl http://localhost:5000 --user-agent \"Googlebot/2.1\" -v"
   },
   "browserslist": [

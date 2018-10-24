@@ -10,7 +10,8 @@ import { authenticateSession, checkSession } from "../../store/auth";
 import { mainNavLinks } from "../../store/ui";
 import { clearMessages } from "../../store/flash";
 
-const SITE_URL = "http://localhost:5000";
+const PORT = process.env.NODE_ENV === "production" ? 5000 : 3000;
+const SITE_URL = `http://localhost:${PORT}`;
 
 const defaultTitle = "Slack App";
 const defaultDescription = "SlackApp Desc";
