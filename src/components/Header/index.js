@@ -17,9 +17,8 @@ export class Header extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ui: state.ui
-});
+const mapStateToProps = ({ ui }) => ({ ui });
+
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ mainNavLinks }, dispatch);
 
