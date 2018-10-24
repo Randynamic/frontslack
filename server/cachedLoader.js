@@ -8,20 +8,13 @@ import Loadable from "react-loadable";
 
 import Helmet from "react-helmet";
 
-import fetch from "isomorphic-fetch";
-import axios from "axios";
+import { getAsyncData } from "./src/controllers/asyncData";
 
 import createStore from "../src/store/config";
 import App from "../src/components/App";
 import manifest from "../build/asset-manifest.json";
 
 import { setCurrentSession, logoutUser } from "../src/store/auth";
-import { listConversationEntries } from "../src/store/entries";
-
-export const LIST_CONVERSATION_ENTRIES = "entries/LIST_CONVERSATIONS";
-export const ADD_CONVERSATION_ENTRY = "entries/ADD_CONVERSATIONS_ENTRY";
-export const TRANSITION_PENDING = "trans/PENDING";
-export const TRANSITION_FINISHED = "trans/FINISHED";
 
 // import ReactCC from "react-component-caching";
 // const Memcached = require("memcached");
@@ -76,78 +69,6 @@ export default async (req, res, next) => {
     });
   };
 
-  const getAsyncData = store =>
-    new Promise((resolve, reject) => {
-      const isAuthorized = store.getState().auth
-        ? store.getState().auth.isAuthenticated
-        : false;
-      const Promise_Menus = new Promise((resolve, reject) => {
-        axios(`http://localhost:4000/api/menus`, {
-          headers: {
-            isAuthorized: isAuthorized
-          }
-        })
-          .then(res => {
-            if (res.data.ok) {
-              store.dispatch({ type: "ui:nav/MAIN", data: res.data.data });
-              return resolve(res.data.data);
-            }
-            // dispatch error case nav menu
-            reject({ e: 1 });
-          })
-          .catch(e => {
-            reject(e);
-          });
-      });
-      const Promise_Conversations = new Promise((resolve, reject) => {
-        if ("auth_session" in req.cookies) {
-          const sessionData = JSON.parse(req.cookies.auth_session);
-          const channelId = "DD3N06ZED";
-          const token = sessionData.access_token;
-          axios(
-            `https://slack.com/api/conversations.history?channel=${channelId}&token=${token}`
-          )
-            .then(channelHistory => {
-              if (channelHistory.data.ok) {
-                const channelEntries = channelHistory.data.messages.map(
-                  (message, index) => {
-                    return {
-                      id: message.bot_id,
-                      title: `${message.type} @ ${message.ts}`,
-                      content: message.text
-                    };
-                  }
-                );
-                store.dispatch({
-                  type: LIST_CONVERSATION_ENTRIES,
-                  data: channelEntries
-                });
-                store.dispatch({ type: TRANSITION_FINISHED, isLoading: false });
-                resolve(channelEntries);
-              } else {
-                store.dispatch({ type: LIST_CONVERSATION_ENTRIES, data: null });
-              }
-            })
-            .catch(e =>
-              store.dispatch({
-                type: NEW_ERROR,
-                data: {
-                  id: "no_channel_data_recieved",
-                  type: "error",
-                  message:
-                    "Something went wrong while retrieving the conversation history."
-                }
-              })
-            );
-        } else {
-          resolve(null);
-        }
-      });
-      Promise.all([Promise_Menus, Promise_Conversations]).then(result => {
-        resolve(result);
-      });
-    });
-
   const { store } = createStore(req.url);
   if ("auth_session" in req.cookies) {
     store.dispatch(setCurrentSession(req.cookies.auth_session));
@@ -155,7 +76,7 @@ export default async (req, res, next) => {
     store.dispatch(logoutUser());
   }
 
-  await getAsyncData(store);
+  await getAsyncData(req, store);
 
   readFile()
     .then(async htmlData => {
