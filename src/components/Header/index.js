@@ -17,6 +17,9 @@ export class Header extends Component {
   }
 }
 
+// TODO USE destructuring here
+// state => {ui}
+// so the object that is returned can be ({ui}) <= simpler
 const mapStateToProps = state => ({
   ui: state.ui
 });
