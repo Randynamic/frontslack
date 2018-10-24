@@ -2,7 +2,7 @@
 
 # Start
 
-api @ :4000 `yarn api`
+api @ :4000 `yarn api:dev || yarn api:prod`
 
 dev @ :3000 `yarn start`
 
